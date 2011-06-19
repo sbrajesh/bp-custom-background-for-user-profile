@@ -69,7 +69,7 @@ function page_content(){
         <label for="bprpgbp_upload">
 		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
 	</label>
-		<?php echo $this->get_max_upload_size();?>
+		
 	<?php wp_nonce_field("bp_upload_profile_bg");?>
         <input type="hidden" name="action" id="action" value="bp_upload_profile_bg" />
 	 <p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e('Save','bppbg') ?>" /></p>
