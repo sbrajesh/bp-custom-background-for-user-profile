@@ -1,0 +1,202 @@
+<?php
+/**
+ * Plugin Name: BP Custom Background for User Profile
+ * Version:1.0
+ * Author: Brajesh Singh
+ * Author URI: http://buddydev.com/members/sbrajesh/
+ * Plugin URI: http://buddydev.com/plugins/
+ * License: GPL 
+ * 
+ * Description: Allows Users to upload custom background image for their profile
+ */
+
+//let us use the class to aboid name space collision with ever growing bp plugins
+
+class BPProfileBGChanger{
+  
+    //php4 constructor
+function BPProfileBGChanger(){
+        $this->__construct();
+    }
+ //php5 constructor   
+function __construct() {
+        //setup nav
+      add_action( 'xprofile_setup_nav',array(&$this,'setup_nav' ));
+        
+      //inject custom css class to body
+      add_filter("body_class",array(&$this,'get_body_class'),30);
+      //add css for background change
+      add_action("wp_head",array(&$this,'inject_css'));
+        
+}
+//adda sub nav to My profile for chaging Background
+function setup_nav(){
+    global $bp;
+    $profile_link = $bp->loggedin_user->domain . $bp->profile->slug . '/';
+    bp_core_new_subnav_item( array( 'name' => __( 'Change Background', 'bppbg' ), 'slug' => 'change-bg', 'parent_url' => $profile_link, 'parent_slug' => $bp->profile->slug, 'screen_function' =>array(&$this,'screen_change_bg'), 'position' => 40 ) );
+   
+}
+
+//screen function
+
+
+function screen_change_bg(){
+    global $bp;
+    //if the form was submitted, update here
+     if(!empty($_POST['bpprofbg_save_submit'])){
+                if(!wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg"))
+                         die(__('Security check failed','bppbg'));
+                //handle the upload
+               if( $this->handle_upload())
+                  bp_core_add_message(__("Background uploaded successfully!","bppg"));
+
+}
+
+    //hook the content
+    add_action( 'bp_template_title', array(&$this,'page_title' ));
+    add_action( 'bp_template_content',array(&$this, 'page_content') );
+    bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'members/single/plugins' ) );
+}
+    //Change Background Page title
+function page_title(){
+		echo "<h3>".__("Profile Photo","bppbg")."</h3>";
+}
+    //Upload page content
+function page_content(){
+	  	   
+	    ?>
+    <form name="bpprofbpg_change" method="post" class="standard-form" enctype="multipart/form-data">
+        <label for="bprpgbp_upload">
+		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
+	</label>
+		<?php echo $this->get_max_upload_size();?>
+	<?php wp_nonce_field("bp_upload_profile_bg");?>
+        <input type="hidden" name="action" id="action" value="bp_upload_profile_bg" />
+	 <p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e('Save','bppbg') ?>" /></p>
+	</form>
+    <?php
+}
+
+//handles upload, a modified version of bp_core_avatar_handle_upload(from bp-core/bp-core-avatars.php)
+function handle_upload( ) {
+	global $bp;
+
+	//include core files
+	require_once( ABSPATH . '/wp-admin/includes/file.php' );
+        $max_upload_size=$this->get_max_upload_size();
+        $max_upload_size=$max_upload_size*1024;//convert kb to bytes
+	$file=$_FILES;
+        
+        //I am not changing the domain of erro messages as these are same as bp, so you should have a translation for this
+        $uploadErrors = array(
+		0 => __("There is no error, the file uploaded with success", 'buddypress'),
+		1 => __("Your image was bigger than the maximum allowed file size of: ", 'buddypress') . size_format($max_upload_size),
+		2 => __("Your image was bigger than the maximum allowed file size of: ", 'buddypress') . size_format($max_upload_size),
+		3 => __("The uploaded file was only partially uploaded", 'buddypress'),
+		4 => __("No file was uploaded", 'buddypress'),
+		6 => __("Missing a temporary folder", 'buddypress')
+	);
+
+	if ( $file['error'] ) {
+		bp_core_add_message( sprintf( __( 'Your upload failed, please try again. Error was: %s', 'buddypress' ), $uploadErrors[$file['file']['error']] ), 'error' );
+		return false;
+	}
+
+	if ( ! ($file['file']['size']<$max_upload_size) ) {
+		bp_core_add_message( sprintf( __( 'The file you uploaded is too big. Please upload a file under %s', 'buddypress'), size_format($max_upload_size) ), 'error' );
+		return false;
+	}
+        
+	if ( ( !empty( $file['file']['type'] ) && !preg_match('/(jpe?g|gif|png)$/i', $file['file']['type'] ) ) || !preg_match( '/(jpe?g|gif|png)$/i', $file['file']['name'] ) )
+	 {
+		bp_core_add_message( __( 'Please upload only JPG, GIF or PNG photos.', 'buddypress' ), 'error' );
+		return false;
+	}
+
+
+	$uploaded_file = wp_handle_upload( $file['file'], array( 'action'=> 'bp_upload_profile_bg' ) );
+
+	//if file was not uploaded correctly
+        if ( !empty($uploaded_file['error'] ) ) {
+		bp_core_add_message( sprintf( __( 'Upload Failed! Error was: %s', 'buddypress' ), $uploaded_file['error'] ), 'error' );
+		return false;
+	}
+
+        //assume that the file uploaded succesfully
+	//save in usermeta
+        update_user_meta(bp_loggedin_user_id(),"profile_bg",$uploaded_file['url']);
+        
+	return true;
+}
+
+//get the allowed upload size
+//there is no setting on single wp, on multisite, there is a setting, we will adhere to both
+function get_max_upload_size(){
+    $max_file_sizein_kb=get_site_option("fileupload_maxk");//it wil be empty for standard wordpress
+    
+    
+    if(empty($max_file_sizein_kb)){//check for the server limit since we are on single wp
+    
+        $max_upload_size = (int)(ini_get('upload_max_filesize'));
+        $max_post_size = (int)(ini_get('post_max_size'));
+        $memory_limit = (int)(ini_get('memory_limit'));
+        $max_file_sizein_mb= min($max_upload_size, $max_post_size, $memory_limit);
+        $max_file_sizein_kb=$max_file_sizein_mb*1024;//convert mb to kb
+}
+return apply_filters('bppg_max_upload_size',$max_file_sizein_kb);
+
+
+
+}
+//inject css
+function inject_css(){
+    $image_url=  bppg_get_image();
+    if(empty($image_url)||  apply_filters("bppg_iwilldo_it_myself",false))
+        return;
+    ?>
+<style type="text/css">
+body.is-user-profile{
+background:url(<?php echo $image_url;?>);
+}
+</style>  
+<?php
+
+}
+
+//inject custom class for profile pages
+
+function get_body_class($classes){
+if(!bp_is_member ())
+return $classes;
+else
+    $classes[]="is-user-profile";
+
+return $classes;
+
+
+}
+
+}
+
+/*public function for your use*/
+/**
+ *
+ * @global type $bp
+ * @param type $user_id
+ * @return string  url of the image associated with current user or false
+ */
+
+function bppg_get_image($user_id=false){
+    global $bp;
+    if(!$user_id&&$bp->displayed_user->id)
+            $user_id=$bp->displayed_user->id;
+    
+     if(empty($user_id))
+         return false;
+     $image_url=get_user_meta($user_id, "profile_bg", true);
+     return apply_filters("bppg_get_image",$image_url,$user_id);
+}
+
+$_profbg=new BPProfileBGChanger();
+
+?>
