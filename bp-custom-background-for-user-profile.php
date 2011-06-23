@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: BP Custom Background for User Profile
- * Version:1.0
+ * Version:1.0.1
  * Author: Brajesh Singh
  * Author URI: http://buddydev.com/members/sbrajesh/
- * Plugin URI: http://buddydev.com/plugins/
+ * Plugin URI: http://buddydev.com/plugins/bp-custom-background-for-user-profile/
  * License: GPL 
  * 
- * Description: Allows Users to upload custom background image for their profile
+ * Description: Allows Users to upload custom background image for their profile pages
  */
 
 //let us use the class to aboid name space collision with ever growing bp plugins
