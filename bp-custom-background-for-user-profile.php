@@ -57,7 +57,7 @@ function screen_change_bg(){
                     @unlink ($old_file_path);//remove old files with each new upload
                 delete_user_meta(bp_loggedin_user_id(),"profile_bg_file_path");
                 delete_user_meta(bp_loggedin_user_id(),"profile_bg");
-                 bp_core_add_message(__("Background image deleted successfully!","bppg"));
+                bp_core_add_message(__("Background image deleted successfully!","bppg"));
                }
 }
 
@@ -76,14 +76,14 @@ function page_content(){
 	    ?>
     <form name="bpprofbpg_change" method="post" class="standard-form" enctype="multipart/form-data">
         <label for="bppg_keep_bg">
-            <input type="radio" name="bppg_keep_bg" id="bppg_keep_bg" checked="checked" value="yes"><?php _e("Keep Bakground","bppg");?>
+            <input type="radio" name="bppg_keep_bg" id="bppg_keep_bg" checked="checked" value="yes"><?php _e("Keep Background Image","bppg");?>
             
             
-        </label><br />
+        </label>
         <label for="bppg_delete_bg">
-            <input type="radio" name="bppg_keep_bg" id="bppg_delete_bg" value="no"><?php _e("Delete background","bppg");?>
+            <input type="radio" name="bppg_keep_bg" id="bppg_delete_bg" value="no"><?php _e("Delete Background Image","bppg");?>
         </label>    
-        <br />
+        
         <p><?php _e("If you want to change your profile background, please upload a new image.","bppg");?></p>
         <label for="bprpgbp_upload">
 		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
