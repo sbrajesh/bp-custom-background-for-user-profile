@@ -20,6 +20,9 @@ function BPProfileBGChanger(){
     }
  //php5 constructor   
 function __construct() {
+      
+      //load textdomain
+      add_action ( 'bp_loaded', array(&$this,'load_textdomain'), 2 );
         //setup nav
       add_action( 'xprofile_setup_nav',array(&$this,'setup_nav' ));
         
@@ -28,6 +31,25 @@ function __construct() {
       //add css for background change
       add_action("wp_head",array(&$this,'inject_css'));
         
+}
+
+//translation
+function load_textdomain(){
+        
+    $locale = apply_filters( 'bp_custom_bg_for_profile_load_textdomain_get_locale', get_locale() );
+     
+	// if load .mo file
+    if ( !empty( $locale ) ) {
+		$mofile_default = sprintf( '%slanguages/%s.mo', plugin_dir_path(__FILE__), $locale );
+              
+		$mofile = apply_filters( 'bp_custom_bg_for_profile_load_textdomain_mofile', $mofile_default );
+		
+                if ( file_exists( $mofile ) ) {
+                    // make sure file exists, and load it
+			load_textdomain( "bppg", $mofile );
+		}
+	} 
+ 
 }
 //adda sub nav to My profile for chaging Background
 function setup_nav(){
