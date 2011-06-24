@@ -1,0 +1,115 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Custom Background for User Profile v1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2011-06-23 22:01+0000\n"
+"Last-Translator: cgagne <clagagne@cgocable.ca>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: bp-custom-background-for-user-profile.php:58
+#@ bppbg
+msgid "Change Background"
+msgstr "Changer l'image de fond"
+
+#: bp-custom-background-for-user-profile.php:70
+#@ bppbg
+msgid "Security check failed"
+msgstr "Le contrôle de sécurité a échoué"
+
+#: bp-custom-background-for-user-profile.php:73
+#@ bppg
+msgid "Background uploaded successfully!"
+msgstr "Image de fond téléchargé avec succès!"
+
+#: bp-custom-background-for-user-profile.php:82
+#@ bppg
+msgid "Background image deleted successfully!"
+msgstr "Image de fond supprimé avec succès!"
+
+#: bp-custom-background-for-user-profile.php:93
+#@ bppbg
+msgid "Profile Photo"
+msgstr "Photo du profil"
+
+#: bp-custom-background-for-user-profile.php:101
+#@ bppg
+msgid "Keep Background Image"
+msgstr "Gardez l'image de fond"
+
+#: bp-custom-background-for-user-profile.php:106
+#@ bppg
+msgid "Delete Background Image"
+msgstr "Supprimer l'mage de fond"
+
+#: bp-custom-background-for-user-profile.php:109
+#@ bppg
+msgid "If you want to change your profile background, please upload a new image."
+msgstr "Si vous voulez changer votre image de fond de votre page de profil, s'il vous plaît télécharger une nouvelle image."
+
+#: bp-custom-background-for-user-profile.php:116
+#@ bppbg
+msgid "Save"
+msgstr "Enregistrer"
+
+#: bp-custom-background-for-user-profile.php:133
+#@ buddypress
+msgid "There is no error, the file uploaded with success"
+msgstr "Il n'y a pas d'erreur, le fichier a été téléchargé avec succès"
+
+#: bp-custom-background-for-user-profile.php:134
+#: bp-custom-background-for-user-profile.php:135
+#@ buddypress
+msgid "Your image was bigger than the maximum allowed file size of: "
+msgstr "Votre image était plus grande que la taille maximale autorisée de:"
+
+#: bp-custom-background-for-user-profile.php:136
+#@ buddypress
+msgid "The uploaded file was only partially uploaded"
+msgstr "Le fichier n'a été que partiellement téléchargé"
+
+#: bp-custom-background-for-user-profile.php:137
+#@ buddypress
+msgid "No file was uploaded"
+msgstr "Pas de fichier téléchargé"
+
+#: bp-custom-background-for-user-profile.php:138
+#@ buddypress
+msgid "Missing a temporary folder"
+msgstr "Dossier temporaire manquant"
+
+#: bp-custom-background-for-user-profile.php:142
+#, php-format
+#@ buddypress
+msgid "Your upload failed, please try again. Error was: %s"
+msgstr "Votre téléchargement a échoué, s'il vous plaît essayez de nouveau. Erreur: %s"
+
+#: bp-custom-background-for-user-profile.php:147
+#, php-format
+#@ buddypress
+msgid "The file you uploaded is too big. Please upload a file under %s"
+msgstr "Le fichier que vous avez téléchargé est trop grand. S'il vous plaît télécharger un fichier sous %s"
+
+#: bp-custom-background-for-user-profile.php:153
+#@ buddypress
+msgid "Please upload only JPG, GIF or PNG photos."
+msgstr "S'il vous plaît télécharger uniquement des photos JPG, GIF ou PNG ."
+
+#: bp-custom-background-for-user-profile.php:162
+#, php-format
+#@ buddypress
+msgid "Upload Failed! Error was: %s"
+msgstr "Échec du transfert! Erreur:%s"
+

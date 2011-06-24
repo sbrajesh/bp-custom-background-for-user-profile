@@ -55,7 +55,7 @@ function load_textdomain(){
 function setup_nav(){
     global $bp;
     $profile_link = $bp->loggedin_user->domain . $bp->profile->slug . '/';
-    bp_core_new_subnav_item( array( 'name' => __( 'Change Background', 'bppbg' ), 'slug' => 'change-bg', 'parent_url' => $profile_link, 'parent_slug' => $bp->profile->slug, 'screen_function' =>array(&$this,'screen_change_bg'), 'position' => 40 ) );
+    bp_core_new_subnav_item( array( 'name' => __( 'Change Background', 'bppg' ), 'slug' => 'change-bg', 'parent_url' => $profile_link, 'parent_slug' => $bp->profile->slug, 'screen_function' =>array(&$this,'screen_change_bg'), 'position' => 40 ) );
    
 }
 
