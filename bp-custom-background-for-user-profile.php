@@ -172,7 +172,7 @@ function handle_upload( ) {
             //save in usermeta
         update_user_meta(bp_loggedin_user_id(),"profile_bg",$uploaded_file['url']);
         update_user_meta(bp_loggedin_user_id(),"profile_bg_file_path",$uploaded_file['file']);
-        
+        do_action("bppg_background_uploaded",$uploaded_file['url']);//allow to do some other actions when a new background is uploaded
 	return true;
 }
 
