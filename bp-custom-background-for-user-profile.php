@@ -30,6 +30,8 @@ function __construct() {
       add_filter('body_class',array(&$this,'get_body_class'),30);
       //add css for background change
       add_action('wp_head',array(&$this,'inject_css'));
+      add_action('wp_print_scripts',array(&$this,'inject_js'));
+      add_action('wp_ajax_bppg_delete_bg',array(&$this,'ajax_delete_current_bg'));
         
 }
 
@@ -72,15 +74,7 @@ function screen_change_bg(){
                if( $this->handle_upload())
                   bp_core_add_message(__('Background uploaded successfully!','bppg'));
                
-               if($_POST['bppg_keep_bg']=="no"){
-                   //delete the associated image and send a message
-                   $old_file_path=get_user_meta(bp_loggedin_user_id(), "profile_bg_file_path",true);
-                if($old_file_path)
-                    @unlink ($old_file_path);//remove old files with each new upload
-                delete_user_meta(bp_loggedin_user_id(),'profile_bg_file_path');
-                delete_user_meta(bp_loggedin_user_id(),'profile_bg');
-                bp_core_add_message(__('Background image deleted successfully!','bppg'));
-               }
+              
 }
 
     //hook the content
@@ -97,15 +91,17 @@ function page_content(){
 	  	   
 	    ?>
     <form name="bpprofbpg_change" method="post" class="standard-form" enctype="multipart/form-data">
-        <label for="bppg_keep_bg">
-            <input type="radio" name="bppg_keep_bg" id="bppg_keep_bg" checked="checked" value="yes"><?php _e('Keep Background Image','bppg');?>
-            
-            
-        </label>
-        <label for="bppg_delete_bg">
-            <input type="radio" name="bppg_keep_bg" id="bppg_delete_bg" value="no"><?php _e('Delete Background Image','bppg');?>
-        </label>    
         
+        <?php  $image_url=  bppg_get_image();
+        if(!empty($image_url)):?>
+        <div id="bg-delete-wrapper">
+            
+            <div class="current-bg">
+                    <img src="<?php echo $image_url;?>" alt="current background" />
+            </div>
+            <a href='#' id='bppg-del-image'>Delete</a>
+       </div>
+       <?php endif;?> 
         <p><?php _e('If you want to change your profile background, please upload a new image.','bppg');?></p>
         <label for="bprpgbp_upload">
 		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
@@ -165,11 +161,8 @@ function handle_upload( ) {
 
         //assume that the file uploaded succesfully
         //delete any previous uploaded image
-        $old_file_path=get_user_meta(bp_loggedin_user_id(), 'profile_bg_file_path',true);
-	if($old_file_path)
-            @unlink ($old_file_path);//remove old files with each new upload
-        
-            //save in usermeta
+        self::delete_bg_for_user();
+        //save in usermeta
         update_user_meta(bp_loggedin_user_id(),'profile_bg',$uploaded_file['url']);
         update_user_meta(bp_loggedin_user_id(),'profile_bg_file_path',$uploaded_file['file']);
         do_action('bppg_background_uploaded',$uploaded_file['url']);//allow to do some other actions when a new background is uploaded
@@ -222,7 +215,33 @@ return $classes;
 
 
 }
+//inject js if I am viewing my own profile
+function inject_js(){
+    if(bp_is_my_profile()&&  bp_is_profile_component()&&  bp_is_current_action('change-bg'))
+        wp_enqueue_script ('bpbg-js',plugin_dir_url(__FILE__)."bppbg.js",array('jquery'));
+}
 
+//ajax delete the existing image
+
+function ajax_delete_current_bg(){
+    
+    //validate nonce
+    if(!wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg"))
+            die('what!');
+    self::delete_bg_for_user();
+     $message=__('Background image deleted successfully!','bppg');
+     echo $message;
+              
+}
+//reuse it
+function delete_bg_for_user(){
+  //delete the associated image and send a message
+    $old_file_path=get_user_meta(bp_loggedin_user_id(), 'profile_bg_file_path',true);
+    if($old_file_path)
+          @unlink ($old_file_path);//remove old files with each new upload
+     delete_user_meta(bp_loggedin_user_id(),'profile_bg_file_path');
+     delete_user_meta(bp_loggedin_user_id(),'profile_bg');  
+}
 }
 
 /*public function for your use*/
