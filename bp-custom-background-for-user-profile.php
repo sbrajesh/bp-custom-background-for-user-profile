@@ -99,7 +99,7 @@ function page_content(){
             <div class="current-bg">
                     <img src="<?php echo $image_url;?>" alt="current background" />
             </div>
-            <a href='#' id='bppg-del-image'>Delete</a>
+            <a href='#' id='bppg-del-image'><?php _e('Delete','bppg');?></a>
        </div>
        <?php endif;?> 
         <p><?php _e('If you want to change your profile background, please upload a new image.','bppg');?></p>
@@ -229,7 +229,7 @@ function ajax_delete_current_bg(){
     if(!wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg"))
             die('what!');
     self::delete_bg_for_user();
-     $message=__('Background image deleted successfully!','bppg');
+     $message='<p>'.__('Background image deleted successfully! Please refresh this page to see it.','bppg').'</p>';//feedback but we don't do anything with it yet, should we do something
      echo $message;
               
 }

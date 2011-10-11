@@ -12,8 +12,12 @@ jQuery(document).ready(function(){
       },
         function(response){
             //remove the current image
+            jq("div#message").remove();
+            $this.parent().before(jq("<div id='message' class='update'>"+response+"</div>"));
             $this.prev('current-bg').fadeOut(100);//hide current image
             $this.parent().remove();//remove from dom the delete link
+            //give feedback
+            
         }
   
 
