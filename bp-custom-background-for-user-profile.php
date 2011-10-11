@@ -27,9 +27,9 @@ function __construct() {
       add_action( 'xprofile_setup_nav',array(&$this,'setup_nav' ));
         
       //inject custom css class to body
-      add_filter("body_class",array(&$this,'get_body_class'),30);
+      add_filter('body_class',array(&$this,'get_body_class'),30);
       //add css for background change
-      add_action("wp_head",array(&$this,'inject_css'));
+      add_action('wp_head',array(&$this,'inject_css'));
         
 }
 
@@ -46,7 +46,7 @@ function load_textdomain(){
 		
                 if ( file_exists( $mofile ) ) {
                     // make sure file exists, and load it
-			load_textdomain( "bppg", $mofile );
+			load_textdomain( 'bppg', $mofile );
 		}
 	} 
  
@@ -70,16 +70,16 @@ function screen_change_bg(){
                          die(__('Security check failed','bppbg'));
                 //handle the upload
                if( $this->handle_upload())
-                  bp_core_add_message(__("Background uploaded successfully!","bppg"));
+                  bp_core_add_message(__('Background uploaded successfully!','bppg'));
                
                if($_POST['bppg_keep_bg']=="no"){
                    //delete the associated image and send a message
                    $old_file_path=get_user_meta(bp_loggedin_user_id(), "profile_bg_file_path",true);
                 if($old_file_path)
                     @unlink ($old_file_path);//remove old files with each new upload
-                delete_user_meta(bp_loggedin_user_id(),"profile_bg_file_path");
-                delete_user_meta(bp_loggedin_user_id(),"profile_bg");
-                bp_core_add_message(__("Background image deleted successfully!","bppg"));
+                delete_user_meta(bp_loggedin_user_id(),'profile_bg_file_path');
+                delete_user_meta(bp_loggedin_user_id(),'profile_bg');
+                bp_core_add_message(__('Background image deleted successfully!','bppg'));
                }
 }
 
@@ -90,7 +90,7 @@ function screen_change_bg(){
 }
     //Change Background Page title
 function page_title(){
-		echo "<h3>".__("Profile Photo","bppbg")."</h3>";
+		echo '<h3>'.__('Profile Photo','bppbg').'</h3>';
 }
     //Upload page content
 function page_content(){
@@ -98,22 +98,22 @@ function page_content(){
 	    ?>
     <form name="bpprofbpg_change" method="post" class="standard-form" enctype="multipart/form-data">
         <label for="bppg_keep_bg">
-            <input type="radio" name="bppg_keep_bg" id="bppg_keep_bg" checked="checked" value="yes"><?php _e("Keep Background Image","bppg");?>
+            <input type="radio" name="bppg_keep_bg" id="bppg_keep_bg" checked="checked" value="yes"><?php _e('Keep Background Image','bppg');?>
             
             
         </label>
         <label for="bppg_delete_bg">
-            <input type="radio" name="bppg_keep_bg" id="bppg_delete_bg" value="no"><?php _e("Delete Background Image","bppg");?>
+            <input type="radio" name="bppg_keep_bg" id="bppg_delete_bg" value="no"><?php _e('Delete Background Image','bppg');?>
         </label>    
         
-        <p><?php _e("If you want to change your profile background, please upload a new image.","bppg");?></p>
+        <p><?php _e('If you want to change your profile background, please upload a new image.','bppg');?></p>
         <label for="bprpgbp_upload">
 		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
 	</label>
 		
 	<?php wp_nonce_field("bp_upload_profile_bg");?>
         <input type="hidden" name="action" id="action" value="bp_upload_profile_bg" />
-	 <p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e('Save','bppbg') ?>" /></p>
+	 <p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e('Save','bppg') ?>" /></p>
 	</form>
     <?php
 }
@@ -130,12 +130,12 @@ function handle_upload( ) {
         
         //I am not changing the domain of erro messages as these are same as bp, so you should have a translation for this
         $uploadErrors = array(
-		0 => __("There is no error, the file uploaded with success", 'buddypress'),
-		1 => __("Your image was bigger than the maximum allowed file size of: ", 'buddypress') . size_format($max_upload_size),
-		2 => __("Your image was bigger than the maximum allowed file size of: ", 'buddypress') . size_format($max_upload_size),
-		3 => __("The uploaded file was only partially uploaded", 'buddypress'),
-		4 => __("No file was uploaded", 'buddypress'),
-		6 => __("Missing a temporary folder", 'buddypress')
+		0 => __('There is no error, the file uploaded with success', 'buddypress'),
+		1 => __('Your image was bigger than the maximum allowed file size of: ', 'buddypress') . size_format($max_upload_size),
+		2 => __('Your image was bigger than the maximum allowed file size of: ', 'buddypress') . size_format($max_upload_size),
+		3 => __('The uploaded file was only partially uploaded', 'buddypress'),
+		4 => __('No file was uploaded', 'buddypress'),
+		6 => __('Missing a temporary folder', 'buddypress')
 	);
 
 	if ( $file['error'] ) {
@@ -165,21 +165,21 @@ function handle_upload( ) {
 
         //assume that the file uploaded succesfully
         //delete any previous uploaded image
-        $old_file_path=get_user_meta(bp_loggedin_user_id(), "profile_bg_file_path",true);
+        $old_file_path=get_user_meta(bp_loggedin_user_id(), 'profile_bg_file_path',true);
 	if($old_file_path)
             @unlink ($old_file_path);//remove old files with each new upload
         
             //save in usermeta
-        update_user_meta(bp_loggedin_user_id(),"profile_bg",$uploaded_file['url']);
-        update_user_meta(bp_loggedin_user_id(),"profile_bg_file_path",$uploaded_file['file']);
-        do_action("bppg_background_uploaded",$uploaded_file['url']);//allow to do some other actions when a new background is uploaded
+        update_user_meta(bp_loggedin_user_id(),'profile_bg',$uploaded_file['url']);
+        update_user_meta(bp_loggedin_user_id(),'profile_bg_file_path',$uploaded_file['file']);
+        do_action('bppg_background_uploaded',$uploaded_file['url']);//allow to do some other actions when a new background is uploaded
 	return true;
 }
 
 //get the allowed upload size
 //there is no setting on single wp, on multisite, there is a setting, we will adhere to both
 function get_max_upload_size(){
-    $max_file_sizein_kb=get_site_option("fileupload_maxk");//it wil be empty for standard wordpress
+    $max_file_sizein_kb=get_site_option('fileupload_maxk');//it wil be empty for standard wordpress
     
     
     if(empty($max_file_sizein_kb)){//check for the server limit since we are on single wp
@@ -198,7 +198,7 @@ return apply_filters('bppg_max_upload_size',$max_file_sizein_kb);
 //inject css
 function inject_css(){
     $image_url=  bppg_get_image();
-    if(empty($image_url)||  apply_filters("bppg_iwilldo_it_myself",false))
+    if(empty($image_url)||  apply_filters('bppg_iwilldo_it_myself',false))
         return;
     ?>
 <style type="text/css">
@@ -216,7 +216,7 @@ function get_body_class($classes){
 if(!bp_is_member ())
 return $classes;
 else
-    $classes[]="is-user-profile";
+    $classes[]='is-user-profile';
 
 return $classes;
 
@@ -240,8 +240,8 @@ function bppg_get_image($user_id=false){
     
      if(empty($user_id))
          return false;
-     $image_url=get_user_meta($user_id, "profile_bg", true);
-     return apply_filters("bppg_get_image",$image_url,$user_id);
+     $image_url=get_user_meta($user_id, 'profile_bg', true);
+     return apply_filters('bppg_get_image',$image_url,$user_id);
 }
 
 $_profbg=new BPProfileBGChanger();
