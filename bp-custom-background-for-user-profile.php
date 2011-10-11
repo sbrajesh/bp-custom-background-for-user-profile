@@ -24,7 +24,7 @@ function __construct() {
       //load textdomain
       add_action ( 'bp_loaded', array(&$this,'load_textdomain'), 2 );
         //setup nav
-      add_action( 'xprofile_setup_nav',array(&$this,'setup_nav' ));
+      add_action( 'bp_xprofile_setup_nav',array(&$this,'setup_nav' ));
         
       //inject custom css class to body
       add_filter('body_class',array(&$this,'get_body_class'),30);
@@ -213,7 +213,7 @@ background:url(<?php echo $image_url;?>);
 //inject custom class for profile pages
 
 function get_body_class($classes){
-if(!bp_is_member ())
+if(!bp_is_user ())
 return $classes;
 else
     $classes[]='is-user-profile';
