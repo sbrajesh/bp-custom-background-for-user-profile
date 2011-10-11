@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bppg\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 01:59+0530\n"
-"PO-Revision-Date: 2011-06-24 01:59+0530\n"
+"POT-Creation-Date: 2011-10-12 02:43+0530\n"
+"PO-Revision-Date: 2011-10-12 02:43+0530\n"
 "Last-Translator: Brajesh Singh <brajesh@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -12,81 +12,77 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile\n"
+"X-Poedit-SearchPath-0: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile\n"
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:58
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:60
 msgid "Change Background"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:70
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:72
 msgid "Security check failed"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:73
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:75
 msgid "Background uploaded successfully!"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:82
-msgid "Background image deleted successfully!"
-msgstr ""
-
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:93
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:87
 msgid "Profile Photo"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:101
-msgid "Keep Background Image"
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:102
+msgid "Delete"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:106
-msgid "Delete Background Image"
-msgstr ""
-
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:109
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:105
 msgid "If you want to change your profile background, please upload a new image."
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:116
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:112
 msgid "Save"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:133
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:129
 msgid "There is no error, the file uploaded with success"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:134
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:135
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:130
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:131
 msgid "Your image was bigger than the maximum allowed file size of: "
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:136
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:132
 msgid "The uploaded file was only partially uploaded"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:137
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:133
 msgid "No file was uploaded"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:138
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:134
 msgid "Missing a temporary folder"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:142
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:138
 #, php-format
 msgid "Your upload failed, please try again. Error was: %s"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:147
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:143
 #, php-format
 msgid "The file you uploaded is too big. Please upload a file under %s"
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:153
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:149
 msgid "Please upload only JPG, GIF or PNG photos."
 msgstr ""
 
-#: /var/www/bp/1.2/test/wp3ms/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:162
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:158
 #, php-format
 msgid "Upload Failed! Error was: %s"
+msgstr ""
+
+#: /var/www/bp/1.5/dev/wp-content/plugins/bp-custom-background-for-user-profile/bp-custom-background-for-user-profile.php:232
+msgid "Background image deleted successfully! Please refresh this page to see it."
 msgstr ""
 
