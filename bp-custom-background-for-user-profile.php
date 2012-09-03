@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: BP Custom Background for User Profile
- * Version:1.0.3
+ * Version:1.0.4
  * Author: Brajesh Singh
  * Author URI: http://buddydev.com/members/sbrajesh/
  * Plugin URI: http://buddydev.com/plugins/bp-custom-background-for-user-profile/
@@ -229,8 +229,9 @@ function ajax_delete_current_bg(){
     if(!wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg"))
             die('what!');
     self::delete_bg_for_user();
-     $message='<p>'.__('Background image deleted successfully! Please refresh this page to see it.','bppg').'</p>';//feedback but we don't do anything with it yet, should we do something
+     $message='<p>'.__('Background image deleted successfully!','bppg').'</p>';//feedback but we don't do anything with it yet, should we do something
      echo $message;
+     exit(0);
               
 }
 //reuse it

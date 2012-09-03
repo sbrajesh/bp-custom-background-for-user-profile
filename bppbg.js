@@ -17,7 +17,8 @@ jQuery(document).ready(function(){
             $this.prev('current-bg').fadeOut(100);//hide current image
             $this.parent().remove();//remove from dom the delete link
             //give feedback
-            
+            //remove the body class
+            jq('body').removeClass('is-user-profile');
         }
   
 
