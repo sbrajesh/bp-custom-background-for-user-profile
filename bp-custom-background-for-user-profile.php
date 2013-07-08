@@ -56,7 +56,7 @@ function load_textdomain(){
 //adda sub nav to My profile for chaging Background
 function setup_nav(){
     global $bp;
-    $profile_link = $bp->loggedin_user->domain . $bp->profile->slug . '/';
+    $profile_link = bp_loggedin_user_domain() . $bp->profile->slug . '/';
     bp_core_new_subnav_item( array( 'name' => __( 'Change Background', 'bppg' ), 'slug' => 'change-bg', 'parent_url' => $profile_link, 'parent_slug' => $bp->profile->slug, 'screen_function' =>array(&$this,'screen_change_bg'), 'position' => 40 ) );
    
 }
@@ -134,7 +134,7 @@ function handle_upload( ) {
 		6 => __('Missing a temporary folder', 'buddypress')
 	);
 
-	if ( $file['error'] ) {
+	if ( isset($file['error']) && $file['error']) {
 		bp_core_add_message( sprintf( __( 'Your upload failed, please try again. Error was: %s', 'buddypress' ), $uploadErrors[$file['file']['error']] ), 'error' );
 		return false;
 	}
@@ -255,8 +255,8 @@ function delete_bg_for_user(){
 
 function bppg_get_image($user_id=false){
     global $bp;
-    if(!$user_id&&$bp->displayed_user->id)
-            $user_id=$bp->displayed_user->id;
+    if(!$user_id)
+            $user_id=  bp_displayed_user_id();
     
      if(empty($user_id))
          return false;
