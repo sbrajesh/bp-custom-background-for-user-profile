@@ -27,7 +27,7 @@ function __construct() {
       add_action( 'bp_xprofile_setup_nav',array(&$this,'setup_nav' ));
         
       //inject custom css class to body
-      add_filter('body_class',array(&$this,'get_body_class'),30);
+      add_filter('body_class',array( $this,'get_body_class'),30);
       //add css for background change
       add_action('wp_head',array(&$this,'inject_css'));
       add_action('wp_print_scripts',array(&$this,'inject_js'));
@@ -57,7 +57,15 @@ function load_textdomain(){
 function setup_nav(){
     global $bp;
     $profile_link = bp_loggedin_user_domain() . $bp->profile->slug . '/';
-    bp_core_new_subnav_item( array( 'name' => __( 'Change Background', 'bppg' ), 'slug' => 'change-bg', 'parent_url' => $profile_link, 'parent_slug' => $bp->profile->slug, 'screen_function' =>array(&$this,'screen_change_bg'), 'position' => 40 ) );
+    bp_core_new_subnav_item( 
+            array( 
+                'name' => __( 'Change Background', 'bppg' ),
+                'slug' => 'change-bg',
+                'parent_url' => $profile_link,
+                'parent_slug' => $bp->profile->slug, 
+                'screen_function' =>array( $this, 'screen_change_bg' ),
+                'user_has_access'   => ( bp_is_my_profile() || is_super_admin() ),
+                'position' => 40 ) );
    
 }
 
