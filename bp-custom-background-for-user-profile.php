@@ -83,7 +83,7 @@ function screen_change_bg(){
                  $current_option = $_POST['bg_repeat'];
                  
                  if(isset($allowed_bg_repeat_options[$current_option]))
-                    update_user_meta(bp_loggedin_user_id(),'profile_bg_repeat', $current_option);
+                    bp_update_user_meta(bp_loggedin_user_id(),'profile_bg_repeat', $current_option);
                
                  if( $this->handle_upload())
                     bp_core_add_message(__('Background uploaded successfully!','bppg'));
