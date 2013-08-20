@@ -22,16 +22,16 @@ function BPProfileBGChanger(){
 function __construct() {
       
       //load textdomain
-      add_action ( 'bp_loaded', array(&$this,'load_textdomain'), 2 );
+      add_action ( 'bp_loaded', array( $this, 'load_textdomain' ), 2 );
         //setup nav
-      add_action( 'bp_xprofile_setup_nav',array(&$this,'setup_nav' ));
+      add_action( 'bp_xprofile_setup_nav', array( $this, 'setup_nav' ) );
         
       //inject custom css class to body
-      add_filter('body_class',array( $this,'get_body_class'),30);
+      add_filter( 'body_class', array( $this, 'get_body_class' ), 30 );
       //add css for background change
-      add_action('wp_head',array(&$this,'inject_css'));
-      add_action('wp_print_scripts',array(&$this,'inject_js'));
-      add_action('wp_ajax_bppg_delete_bg',array(&$this,'ajax_delete_current_bg'));
+      add_action( 'wp_head', array( $this, 'inject_css' ) );
+      add_action( 'wp_print_scripts', array( $this, 'inject_js' ) );
+      add_action( 'wp_ajax_bppg_delete_bg', array( $this, 'ajax_delete_current_bg' ) );
         
 }
 
@@ -42,11 +42,11 @@ function load_textdomain(){
      
 	// if load .mo file
     if ( !empty( $locale ) ) {
-		$mofile_default = sprintf( '%slanguages/%s.mo', plugin_dir_path(__FILE__), $locale );
+		$mofile_default = sprintf( '%slanguages/%s.mo', plugin_dir_path( __FILE__ ), $locale );
               
 		$mofile = apply_filters( 'bp_custom_bg_for_profile_load_textdomain_mofile', $mofile_default );
 		
-                if ( file_exists( $mofile ) ) {
+        if ( file_exists( $mofile ) ) {
                     // make sure file exists, and load it
 			load_textdomain( 'bppg', $mofile );
 		}
@@ -75,8 +75,8 @@ function setup_nav(){
 function screen_change_bg(){
     global $bp;
     //if the form was submitted, update here
-     if(!empty($_POST['bpprofbg_save_submit'])){
-                if(!wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg"))
+     if( !empty( $_POST['bpprofbg_save_submit'] ) ){
+                if( !wp_verify_nonce( $_POST['_wpnonce'], 'bp_upload_profile_bg' ) )
                          die(__('Security check failed','bppbg'));
                 //handle the upload
                if( $this->handle_upload())
@@ -86,8 +86,8 @@ function screen_change_bg(){
 }
 
     //hook the content
-    add_action( 'bp_template_title', array(&$this,'page_title' ));
-    add_action( 'bp_template_content',array(&$this, 'page_content') );
+    add_action( 'bp_template_title', array( $this,'page_title' ));
+    add_action( 'bp_template_content',array( $this, 'page_content') );
     bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'members/single/plugins' ) );
 }
     //Change Background Page title
@@ -171,35 +171,35 @@ function handle_upload( ) {
         //delete any previous uploaded image
         self::delete_bg_for_user();
         //save in usermeta
-        update_user_meta(bp_loggedin_user_id(),'profile_bg',$uploaded_file['url']);
-        update_user_meta(bp_loggedin_user_id(),'profile_bg_file_path',$uploaded_file['file']);
-        do_action('bppg_background_uploaded',$uploaded_file['url']);//allow to do some other actions when a new background is uploaded
+        bp_update_user_meta(bp_loggedin_user_id(),'profile_bg',$uploaded_file['url']);
+        bp_update_user_meta(bp_loggedin_user_id(),'profile_bg_file_path',$uploaded_file['file']);
+        do_action( 'bppg_background_uploaded', $uploaded_file['url'] );//allow to do some other actions when a new background is uploaded
 	return true;
 }
 
 //get the allowed upload size
 //there is no setting on single wp, on multisite, there is a setting, we will adhere to both
 function get_max_upload_size(){
-    $max_file_sizein_kb=get_site_option('fileupload_maxk');//it wil be empty for standard wordpress
+    $max_file_sizein_kb = get_site_option( 'fileupload_maxk' );//it wil be empty for standard wordpress
     
     
-    if(empty($max_file_sizein_kb)){//check for the server limit since we are on single wp
+    if( empty( $max_file_sizein_kb ) ){//check for the server limit since we are on single wp
     
         $max_upload_size = (int)(ini_get('upload_max_filesize'));
         $max_post_size = (int)(ini_get('post_max_size'));
         $memory_limit = (int)(ini_get('memory_limit'));
-        $max_file_sizein_mb= min($max_upload_size, $max_post_size, $memory_limit);
-        $max_file_sizein_kb=$max_file_sizein_mb*1024;//convert mb to kb
+        $max_file_sizein_mb = min( $max_upload_size, $max_post_size, $memory_limit );
+        $max_file_sizein_kb =$max_file_sizein_mb*1024;//convert mb to kb
 }
-return apply_filters('bppg_max_upload_size',$max_file_sizein_kb);
+return apply_filters( 'bppg_max_upload_size', $max_file_sizein_kb );
 
 
 
 }
 //inject css
 function inject_css(){
-    $image_url=  bppg_get_image();
-    if(empty($image_url)||  apply_filters('bppg_iwilldo_it_myself',false))
+    $image_url = bppg_get_image();
+    if(empty($image_url) || apply_filters( 'bppg_iwilldo_it_myself', false ) )
         return;
     ?>
 <style type="text/css">
@@ -214,19 +214,19 @@ background:url(<?php echo $image_url;?>);
 //inject custom class for profile pages
 
 function get_body_class($classes){
-if(!bp_is_user ())
-return $classes;
-else
-    $classes[]='is-user-profile';
+    if( !bp_is_user () )
+        return $classes;
+    else
+        $classes[] = 'is-user-profile';
 
-return $classes;
+    return $classes;
 
 
 }
 //inject js if I am viewing my own profile
 function inject_js(){
-    if(bp_is_my_profile()&&  bp_is_profile_component()&&  bp_is_current_action('change-bg'))
-        wp_enqueue_script ('bpbg-js',plugin_dir_url(__FILE__)."bppbg.js",array('jquery'));
+    if( bp_is_my_profile() && bp_is_profile_component() && bp_is_current_action( 'change-bg' ) )
+        wp_enqueue_script ( 'bpbg-js', plugin_dir_url(__FILE__). 'bppbg.js', array('jquery') );
 }
 
 //ajax delete the existing image
@@ -234,7 +234,7 @@ function inject_js(){
 function ajax_delete_current_bg(){
     
     //validate nonce
-    if(!wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg"))
+    if( !wp_verify_nonce($_POST['_wpnonce'],"bp_upload_profile_bg") )
             die('what!');
     self::delete_bg_for_user();
      $message='<p>'.__('Background image deleted successfully!','bppg').'</p>';//feedback but we don't do anything with it yet, should we do something
@@ -245,11 +245,11 @@ function ajax_delete_current_bg(){
 //reuse it
 function delete_bg_for_user(){
   //delete the associated image and send a message
-    $old_file_path=get_user_meta(bp_loggedin_user_id(), 'profile_bg_file_path',true);
-    if($old_file_path)
-          @unlink ($old_file_path);//remove old files with each new upload
-     delete_user_meta(bp_loggedin_user_id(),'profile_bg_file_path');
-     delete_user_meta(bp_loggedin_user_id(),'profile_bg');  
+    $old_file_path = get_user_meta( bp_loggedin_user_id(), 'profile_bg_file_path', true );
+    if( $old_file_path )
+          @unlink ( $old_file_path );//remove old files with each new upload
+     bp_delete_user_meta( bp_loggedin_user_id(), 'profile_bg_file_path' );
+     bp_delete_user_meta( bp_loggedin_user_id(), 'profile_bg' );  
 }
 }
 
@@ -264,14 +264,13 @@ function delete_bg_for_user(){
 function bppg_get_image($user_id=false){
     global $bp;
     if(!$user_id)
-            $user_id=  bp_displayed_user_id();
+            $user_id = bp_displayed_user_id();
     
-     if(empty($user_id))
+     if( empty( $user_id ) )
          return false;
-     $image_url=get_user_meta($user_id, 'profile_bg', true);
-     return apply_filters('bppg_get_image',$image_url,$user_id);
+     $image_url = bp_get_user_meta( $user_id, 'profile_bg', true );
+     return apply_filters( 'bppg_get_image', $image_url, $user_id );
 }
 
-$_profbg=new BPProfileBGChanger();
+$_profbg = new BPProfileBGChanger();
 
-?>
