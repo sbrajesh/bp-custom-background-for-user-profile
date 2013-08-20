@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
     
    var jq=jQuery;
-   jq("#bppg-del-image").live('click',function(){
+   jq("#bpprofbpg_change").on('click', '#bppg-del-image', function(){
       var $this=jq(this);
       var noce='';
       
@@ -26,6 +26,13 @@ jQuery(document).ready(function(){
     return false;
        
    })
-    
+  //bind for live changes
+
+jq('.bppg-repeat-options').on('click', 'input', function(){
+  
+   
+	   jq(".is-user-profile").css('background-repeat', jq(this).val());
+   
+});
     
 });

@@ -79,8 +79,14 @@ function screen_change_bg(){
                 if( !wp_verify_nonce( $_POST['_wpnonce'], 'bp_upload_profile_bg' ) )
                          die(__('Security check failed','bppbg'));
                 //handle the upload
-               if( $this->handle_upload())
-                  bp_core_add_message(__('Background uploaded successfully!','bppg'));
+                 $allowed_bg_repeat_options = bppg_get_image_repeat_options();
+                 $current_option = $_POST['bg_repeat'];
+                 
+                 if(isset($allowed_bg_repeat_options[$current_option]))
+                    update_user_meta(bp_loggedin_user_id(),'profile_bg_repeat', $current_option);
+               
+                 if( $this->handle_upload())
+                    bp_core_add_message(__('Background uploaded successfully!','bppg'));
                
               
 }
@@ -98,7 +104,30 @@ function page_title(){
 function page_content(){
 	  	   
 	    ?>
-    <form name="bpprofbpg_change" method="post" class="standard-form" enctype="multipart/form-data">
+    <style type='text/css'>
+    	.radio_labels1{
+			float: left;
+			width: 75px;
+			height: 30px;
+			text-align: center;
+			line-height: 30px;    	
+    	}
+    	.radio_labels2{
+			float: left;
+			width: 75px;
+			height: 30px;
+			text-align: center;
+			line-height: 18px;    	
+    	}
+    	.radio_items{
+			float: left;
+			width: 75px;
+			text-align: center;
+			padding-top: 10px;    	
+    	}
+    	
+    </style>
+    <form name="bpprofbpg_change" id="bpprofbpg_change" method="post" class="standard-form" enctype="multipart/form-data">
         
         <?php  $image_url=  bppg_get_image();
         if(!empty($image_url)):?>
@@ -115,6 +144,35 @@ function page_content(){
 		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
 	</label>
 		
+        
+        	<br />
+	
+	<h3 style="padding-bottom:0px;">Please choose your background repeat option</h3>
+	
+	
+	
+	<div style="clear:both;" class="bppg-repeat-options">
+		<?php 
+	
+            $repeat_options = bppg_get_image_repeat_options();
+            $selected = bppg_get_image_repeat( get_current_user_id() );
+            
+			//echo "<ul>";
+			foreach( $repeat_options as $key => $label ):
+				?>
+            <div class="radio_items"><?php echo $label;?><br /><input type="radio" name="bg_repeat" id="bg_repeat<?php echo $key; ?>" value="<?php echo $key; ?>" <?php echo checked($key,$selected); ?>/></div>		
+				
+           
+            <?php
+             endforeach;
+            //echo "</ul>";
+		?>
+	</div>
+	
+	<br />
+	<br />
+	<br />
+    
 	<?php wp_nonce_field("bp_upload_profile_bg");?>
         <input type="hidden" name="action" id="action" value="bp_upload_profile_bg" />
 	 <p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e('Save','bppg') ?>" /></p>
@@ -173,6 +231,10 @@ function handle_upload( ) {
         //save in usermeta
         bp_update_user_meta(bp_loggedin_user_id(),'profile_bg',$uploaded_file['url']);
         bp_update_user_meta(bp_loggedin_user_id(),'profile_bg_file_path',$uploaded_file['file']);
+        
+        
+       
+        
         do_action( 'bppg_background_uploaded', $uploaded_file['url'] );//allow to do some other actions when a new background is uploaded
 	return true;
 }
@@ -201,10 +263,14 @@ function inject_css(){
     $image_url = bppg_get_image();
     if(empty($image_url) || apply_filters( 'bppg_iwilldo_it_myself', false ) )
         return;
+    $repeat_type = bp_get_user_meta(bp_loggedin_user_id(), 'profile_bg_repeat', true);
+    if(! $repeat_type )
+        $repeat_type = 'repeat';
     ?>
 <style type="text/css">
 body.is-user-profile{
-background:url(<?php echo $image_url;?>);
+    background: url(<?php echo $image_url;?>);
+	background-repeat: <?php echo $repeat_type; ?>;
 }
 </style>  
 <?php
@@ -250,6 +316,7 @@ function delete_bg_for_user(){
           @unlink ( $old_file_path );//remove old files with each new upload
      bp_delete_user_meta( bp_loggedin_user_id(), 'profile_bg_file_path' );
      bp_delete_user_meta( bp_loggedin_user_id(), 'profile_bg' );  
+     bp_delete_user_meta( bp_loggedin_user_id(),'profile_bg_repeat');
 }
 }
 
@@ -261,7 +328,7 @@ function delete_bg_for_user(){
  * @return string  url of the image associated with current user or false
  */
 
-function bppg_get_image($user_id=false){
+function bppg_get_image( $user_id = false ){
     global $bp;
     if(!$user_id)
             $user_id = bp_displayed_user_id();
@@ -271,6 +338,25 @@ function bppg_get_image($user_id=false){
      $image_url = bp_get_user_meta( $user_id, 'profile_bg', true );
      return apply_filters( 'bppg_get_image', $image_url, $user_id );
 }
+function bppg_get_image_repeat( $user_id = false ){
+    global $bp;
+    if( !$user_id )
+            $user_id = bp_displayed_user_id();
+    
+     if( empty( $user_id ) )
+         return false;
+     
+    		
+	 $current_repeat_option = bp_get_user_meta( $user_id, 'profile_bg_repeat', true);
+     if( ! $current_repeat_option )
+         $current_repeat_option = 'repeat';
+     
+     return $current_repeat_option;
+}
 
+function bppg_get_image_repeat_options(){
+    return  array('repeat' =>__('Repeat','bppg'), 'repeat-x'=>__('Repeat Horizontally','bppg'),'repeat-y'=>__('Repeat Vertically','bppg'), 'no-repeat'=>__('Do Not Repeat','bppg'));
+	
+}
 $_profbg = new BPProfileBGChanger();
 
