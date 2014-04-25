@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: BP Custom Background for User Profile
- * Version:1.0.5
+ * Version:1.0.6
  * Author: Brajesh Singh
  * Author URI: http://buddydev.com/members/sbrajesh/
  * Plugin URI: http://buddydev.com/plugins/bp-custom-background-for-user-profile/
@@ -14,10 +14,7 @@
 
 class BPProfileBGChanger{
   
-    //php4 constructor
-function BPProfileBGChanger(){
-        $this->__construct();
-    }
+
  //php5 constructor   
 function __construct() {
       
@@ -93,7 +90,7 @@ function screen_change_bg(){
 
     //hook the content
     add_action( 'bp_template_title', array( $this,'page_title' ));
-    add_action( 'bp_template_content',array( $this, 'page_content') );
+    add_action( 'bp_template_content', array( $this, 'page_content') );
     bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'members/single/plugins' ) );
 }
     //Change Background Page title
@@ -139,7 +136,10 @@ function page_content(){
             <a href='#' id='bppg-del-image'><?php _e('Delete','bppg');?></a>
        </div>
        <?php endif;?> 
-        <p><?php _e('If you want to change your profile background, please upload a new image.','bppg');?></p>
+        <p>
+            <?php _e( 'If you want to change your profile background, please upload a new image.', 'bppg');?>
+            <?php printf( __('Maximum allowed file size for upload: %s', 'bppg' ), $this->format_size( $this->get_max_upload_size() ) );?>
+        </p>
         <label for="bprpgbp_upload">
 		<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
 	</label>
@@ -239,6 +239,22 @@ function handle_upload( ) {
 	return true;
 }
 
+function format_size( $size ){
+    $upload_size_unit = $size * 1024;//convert kb to bytes
+    $sizes = array( 'KB', 'MB', 'GB' );
+    for ( $u = -1; $upload_size_unit > 1024 && $u < count( $sizes ) - 1; $u++ ) {
+		$upload_size_unit /= 1024;
+	}
+
+	if ( $u < 0 ) {
+		$upload_size_unit = 0;
+		$u = 0;
+	} else {
+		$upload_size_unit = (int) $upload_size_unit;
+	}
+    
+    return $upload_size_unit . $sizes[$u];
+}
 //get the allowed upload size
 //there is no setting on single wp, on multisite, there is a setting, we will adhere to both
 function get_max_upload_size(){
@@ -246,13 +262,12 @@ function get_max_upload_size(){
     
     
     if( empty( $max_file_sizein_kb ) ){//check for the server limit since we are on single wp
-    
-        $max_upload_size = (int)(ini_get('upload_max_filesize'));
-        $max_post_size = (int)(ini_get('post_max_size'));
-        $memory_limit = (int)(ini_get('memory_limit'));
-        $max_file_sizein_mb = min( $max_upload_size, $max_post_size, $memory_limit );
-        $max_file_sizein_kb =$max_file_sizein_mb*1024;//convert mb to kb
-}
+        $upload_size_unit = wp_max_upload_size();
+	
+        $upload_size_unit /= 1024; //KB
+        $max_file_sizein_kb = $upload_size_unit;
+        
+    }
 return apply_filters( 'bppg_max_upload_size', $max_file_sizein_kb );
 
 
