@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: BP Custom Background for User Profile
- * Version:1.0.6
+ * Version:1.0.7
  * Author: Brajesh Singh
  * Author URI: http://buddydev.com/members/sbrajesh/
  * Plugin URI: http://buddydev.com/plugins/bp-custom-background-for-user-profile/
@@ -32,55 +32,54 @@ class BPProfileBGChanger {
 
 	//translation
 	public function load_textdomain() {
-
-		$locale = apply_filters( 'bp_custom_bg_for_profile_load_textdomain_get_locale', get_locale() );
-
-		// if load .mo file
-		if ( ! empty( $locale ) ) {
-			$mofile_default = sprintf( '%slanguages/%s.mo', plugin_dir_path( __FILE__ ), $locale );
-
-			$mofile = apply_filters( 'bp_custom_bg_for_profile_load_textdomain_mofile', $mofile_default );
-
-			if ( file_exists( $mofile ) ) {
-				// make sure file exists, and load it
-				load_textdomain( 'bppg', $mofile );
-			}
-		}
+		
+		load_plugin_textdomain( 'bp-custom-background-for-user-profile', false, wp_basename( dirname( __FILE__ ) ) ) ;
 	}
 
 	//adda sub nav to My profile for chaging Background
 	public function setup_nav() {
-		global $bp;
+		
+		$bp = buddypress();
+		
 		$profile_link = bp_loggedin_user_domain() . $bp->profile->slug . '/';
+		
 		bp_core_new_subnav_item(
-				array(
-					'name' => __( 'Change Background', 'bppg' ),
-					'slug' => 'change-bg',
-					'parent_url' => $profile_link,
-					'parent_slug' => $bp->profile->slug,
-					'screen_function' => array( $this, 'screen_change_bg' ),
-					'user_has_access' => ( bp_is_my_profile() || is_super_admin() ),
-					'position' => 40 ) );
+			array(
+				'name'				=> __( 'Change Background', 'bp-custom-background-for-user-profile' ),
+				'slug'				=> 'change-bg',
+				'parent_url'		=> $profile_link,
+				'parent_slug'		=> $bp->profile->slug,
+				'screen_function'	=> array( $this, 'screen_change_bg' ),
+				'user_has_access'	=> ( bp_is_my_profile() || is_super_admin() ),
+				'position'			=> 40 
+			) 
+		);
 	}
 
 //screen function
 
 
 	public function screen_change_bg() {
-		global $bp;
+		
 		//if the form was submitted, update here
 		if ( ! empty( $_POST['bpprofbg_save_submit'] ) ) {
-			if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'bp_upload_profile_bg' ) )
-				die( __( 'Security check failed', 'bppbg' ) );
+			
+			if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'bp_upload_profile_bg' ) ) {
+				die( __( 'Security check failed', 'bp-custom-background-for-user-profile' ) );
+			}
+			
 			//handle the upload
 			$allowed_bg_repeat_options = bppg_get_image_repeat_options();
 			$current_option = $_POST['bg_repeat'];
 
-			if ( isset( $allowed_bg_repeat_options[$current_option] ) )
+			if ( isset( $allowed_bg_repeat_options[$current_option] ) ) {
 				bp_update_user_meta( bp_loggedin_user_id(), 'profile_bg_repeat', $current_option );
+			}
 
-			if ( $this->handle_upload() )
-				bp_core_add_message( __( 'Background uploaded successfully!', 'bppg' ) );
+			if ( $this->handle_upload() ) {
+				bp_core_add_message( __( 'Background uploaded successfully!', 'bp-custom-background-for-user-profile' ) );
+			}
+			
 		}
 
 		//hook the content
@@ -91,7 +90,7 @@ class BPProfileBGChanger {
 
 	//Change Background Page title
 	public function page_title() {
-		echo '<h3>' . __( 'Profile Photo', 'bppbg' ) . '</h3>';
+		echo '<h3>' . __( 'Profile Photo', 'bp-custom-background-for-user-profile' ) . '</h3>';
 	}
 
 	//Upload page content
@@ -130,12 +129,12 @@ class BPProfileBGChanger {
 					<div class="current-bg">
 						<img src="<?php echo $image_url; ?>" alt="current background" />
 					</div>
-					<a href='#' id='bppg-del-image'><?php _e( 'Delete', 'bppg' ); ?></a>
+					<a href='#' id='bppg-del-image'><?php _e( 'Delete', 'bp-custom-background-for-user-profile' ); ?></a>
 				</div>
 		<?php endif; ?> 
 			<p>
-			<?php _e( 'If you want to change your profile background, please upload a new image.', 'bppg' ); ?>
-			<?php printf( __( 'Maximum allowed file size for upload: %s', 'bppg' ), $this->format_size( $this->get_max_upload_size() ) ); ?>
+			<?php _e( 'If you want to change your profile background, please upload a new image.', 'bp-custom-background-for-user-profile' ); ?>
+			<?php printf( __( 'Maximum allowed file size for upload: %s', 'bp-custom-background-for-user-profile' ), $this->format_size( $this->get_max_upload_size() ) ); ?>
 			</p>
 			<label for="bprpgbp_upload">
 				<input type="file" name="file" id="bprpgbp_upload"  class="settings-input" />
@@ -144,24 +143,23 @@ class BPProfileBGChanger {
 
 			<br />
 
-			<h3 style="padding-bottom:0px;">Please choose your background repeat option</h3>
+			<h3 style="padding-bottom:0px;"> <?php _e( 'Please choose your background repeat option', 'bp-custom-background-for-user-profile');?> </h3>
 
 
 
 			<div style="clear:both;" class="bppg-repeat-options">
-		<?php
-		$repeat_options = bppg_get_image_repeat_options();
-		$selected = bppg_get_image_repeat( get_current_user_id() );
+			<?php
+				$repeat_options = bppg_get_image_repeat_options();
+				$selected = bppg_get_image_repeat( get_current_user_id() );
 
-		//echo "<ul>";
-		foreach ( $repeat_options as $key => $label ):
-			?>
+				//echo "<ul>";
+				foreach ( $repeat_options as $key => $label ):
+					?>
 					<div class="radio_items"><?php echo $label; ?><br /><input type="radio" name="bg_repeat" id="bg_repeat<?php echo $key; ?>" value="<?php echo $key; ?>" <?php echo checked( $key, $selected ); ?>/></div>		
 
-
-					<?php
+				<?php
 				endforeach;
-				//echo "</ul>";
+					//echo "</ul>";
 				?>
 			</div>
 
@@ -171,7 +169,7 @@ class BPProfileBGChanger {
 
 		<?php wp_nonce_field( "bp_upload_profile_bg" ); ?>
 			<input type="hidden" name="action" id="action" value="bp_upload_profile_bg" />
-			<p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e( 'Save', 'bppg' ) ?>" /></p>
+			<p class="submit"><input type="submit" id="bpprofbg_save_submit" name="bpprofbg_save_submit" class="button" value="<?php _e( 'Save', 'bp-custom-background-for-user-profile' ) ?>" /></p>
 		</form>
 			<?php
 		}
@@ -188,26 +186,26 @@ class BPProfileBGChanger {
 
 			//I am not changing the domain of erro messages as these are same as bp, so you should have a translation for this
 			$uploadErrors = array(
-				0 => __( 'There is no error, the file uploaded with success', 'buddypress' ),
-				1 => __( 'Your image was bigger than the maximum allowed file size of: ', 'buddypress' ) . size_format( $max_upload_size ),
-				2 => __( 'Your image was bigger than the maximum allowed file size of: ', 'buddypress' ) . size_format( $max_upload_size ),
-				3 => __( 'The uploaded file was only partially uploaded', 'buddypress' ),
-				4 => __( 'No file was uploaded', 'buddypress' ),
-				6 => __( 'Missing a temporary folder', 'buddypress' )
+				0 => __( 'There is no error, the file uploaded with success', 'bp-custom-background-for-user-profile' ),
+				1 => __( 'Your image was bigger than the maximum allowed file size of: ', 'bp-custom-background-for-user-profile' ) . size_format( $max_upload_size ),
+				2 => __( 'Your image was bigger than the maximum allowed file size of: ', 'bp-custom-background-for-user-profile' ) . size_format( $max_upload_size ),
+				3 => __( 'The uploaded file was only partially uploaded', 'bp-custom-background-for-user-profiles' ),
+				4 => __( 'No file was uploaded', 'bp-custom-background-for-user-profile' ),
+				6 => __( 'Missing a temporary folder', 'bp-custom-background-for-user-profile' )
 			);
 
 			if ( isset( $file['error'] ) && $file['error'] ) {
-				bp_core_add_message( sprintf( __( 'Your upload failed, please try again. Error was: %s', 'buddypress' ), $uploadErrors[$file['file']['error']] ), 'error' );
+				bp_core_add_message( sprintf( __( 'Your upload failed, please try again. Error was: %s', 'bp-custom-background-for-user-profile' ), $uploadErrors[$file['file']['error']] ), 'error' );
 				return false;
 			}
 
 			if ( ! ($file['file']['size'] < $max_upload_size) ) {
-				bp_core_add_message( sprintf( __( 'The file you uploaded is too big. Please upload a file under %s', 'buddypress' ), size_format( $max_upload_size ) ), 'error' );
+				bp_core_add_message( sprintf( __( 'The file you uploaded is too big. Please upload a file under %s', 'bp-custom-background-for-user-profile' ), size_format( $max_upload_size ) ), 'error' );
 				return false;
 			}
 
 			if ( ( ! empty( $file['file']['type'] ) && ! preg_match( '/(jpe?g|gif|png)$/i', $file['file']['type'] ) ) || ! preg_match( '/(jpe?g|gif|png)$/i', $file['file']['name'] ) ) {
-				bp_core_add_message( __( 'Please upload only JPG, GIF or PNG photos.', 'buddypress' ), 'error' );
+				bp_core_add_message( __( 'Please upload only JPG, GIF or PNG photos.', 'bp-custom-background-for-user-profile' ), 'error' );
 				return false;
 			}
 
@@ -216,7 +214,7 @@ class BPProfileBGChanger {
 
 			//if file was not uploaded correctly
 			if ( ! empty( $uploaded_file['error'] ) ) {
-				bp_core_add_message( sprintf( __( 'Upload Failed! Error was: %s', 'buddypress' ), $uploaded_file['error'] ), 'error' );
+				bp_core_add_message( sprintf( __( 'Upload Failed! Error was: %s', 'bp-custom-background-for-user-profile' ), $uploaded_file['error'] ), 'error' );
 				return false;
 			}
 
@@ -263,6 +261,7 @@ class BPProfileBGChanger {
 				$upload_size_unit /= 1024; //KB
 				$max_file_sizein_kb = $upload_size_unit;
 			}
+			
 			return apply_filters( 'bppg_max_upload_size', $max_file_sizein_kb );
 		}
 
@@ -322,7 +321,7 @@ class BPProfileBGChanger {
 		
 		self::delete_bg_for_user();
 		
-		$message = '<p>' . __( 'Background image deleted successfully!', 'bppg' ) . '</p>'; //feedback but we don't do anything with it yet, should we do something
+		$message = '<p>' . __( 'Background image deleted successfully!', 'bp-custom-background-for-user-profile' ) . '</p>'; //feedback but we don't do anything with it yet, should we do something
 		
 		echo $message;
 		
@@ -394,10 +393,10 @@ function bppg_get_image_repeat( $user_id = false ) {
 
 function bppg_get_image_repeat_options() {
 	return array( 
-		'repeat'	=> __( 'Repeat', 'bppg' ), 
-		'repeat-x'	=> __( 'Repeat Horizontally', 'bppg' ), 
-		'repeat-y'	=> __( 'Repeat Vertically', 'bppg' ), 
-		'no-repeat' => __( 'Do Not Repeat', 'bppg' ) 
+		'repeat'	=> __( 'Repeat', 'bp-custom-background-for-user-profile' ), 
+		'repeat-x'	=> __( 'Repeat Horizontally', 'bp-custom-background-for-user-profile' ), 
+		'repeat-y'	=> __( 'Repeat Vertically', 'bp-custom-background-for-user-profile' ), 
+		'no-repeat' => __( 'Do Not Repeat', 'bp-custom-background-for-user-profile' ) 
 	);
 }
 
