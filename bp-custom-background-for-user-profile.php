@@ -283,8 +283,8 @@ class BPProfileBGChanger {
 			?>
 			<style type="text/css">
 				body.is-user-profile{
-					background: url(<?php echo $image_url; ?>);
-					background-repeat: <?php echo $repeat_type; ?>;
+					background: url(<?php echo $image_url; ?>) !important;
+					background-repeat: <?php echo $repeat_type; ?> !important;
 				}
 			</style>  
 		<?php
