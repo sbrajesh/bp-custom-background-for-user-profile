@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: BP Custom Background for User Profile
  * Version:1.0.7
@@ -10,13 +9,28 @@
  * 
  * Description: Allows Users to upload custom background image for their profile pages
  */
-//let us use the class to aboid name space collision with ever growing bp plugins
 
+// Exit if file access directly over web.
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Class BPProfileBGChanger
+ */
 class BPProfileBGChanger {
 
-	
+	/**
+	 * The constructor.
+	 */
 	public function __construct() {
+        $this->setup();
+	}
 
+	/**
+	 * Callback for various hooks
+	 */
+	public function setup() {
 		//load textdomain
 		add_action( 'bp_loaded', array( $this, 'load_textdomain' ), 2 );
 		//setup nav
@@ -26,14 +40,15 @@ class BPProfileBGChanger {
 		add_filter( 'body_class', array( $this, 'get_body_class' ), 30 );
 		//add css for background change
 		add_action( 'wp_head', array( $this, 'inject_css' ) );
-		add_action( 'wp_print_scripts', array( $this, 'inject_js' ) );
+		add_action( 'bp_enqueue_scripts', array( $this, 'inject_js' ) );
 		add_action( 'wp_ajax_bppg_delete_bg', array( $this, 'ajax_delete_current_bg' ) );
-	}
+    }
 
-	//translation
+	/**
+	 * Load plugin language file
+	 */
 	public function load_textdomain() {
-		
-		load_plugin_textdomain( 'bp-custom-background-for-user-profile', false, wp_basename( dirname( __FILE__ ) ) ) ;
+		load_plugin_textdomain( 'bp-custom-background-for-user-profile', false, basename( dirname( __FILE__ ) ) . '/languages' ) ;
 	}
 
 	//adda sub nav to My profile for chaging Background
@@ -56,10 +71,10 @@ class BPProfileBGChanger {
 		);
 	}
 
-//screen function
-
-
-	public function screen_change_bg() {
+	/**
+	 * Screen change background
+	 */
+    public function screen_change_bg() {
 		
 		//if the form was submitted, update here
 		if ( ! empty( $_POST['bpprofbg_save_submit'] ) ) {
