@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: BP Custom Background for User Profile
- * Version:1.0.8
+ * Version:1.0.9
  * Author: Brajesh Singh
  * Author URI: http://buddydev.com/members/sbrajesh/
  * Plugin URI: http://buddydev.com/plugins/bp-custom-background-for-user-profile/
