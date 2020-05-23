@@ -203,7 +203,12 @@ class BPProfileBGChanger {
 
 	//handles upload, a modified version of bp_core_avatar_handle_upload(from bp-core/bp-core-avatars.php)
 	public function handle_upload() {
-		global $bp;
+
+	    if ( ! isset( $_FILES['file'], $_FILES['file']['tmp_name'] ) || empty( $_FILES['file']['tmp_name'] ) ) {
+	        return false;
+	    }
+
+	    global $bp;
 
 		//include core files
 		require_once( ABSPATH . '/wp-admin/includes/file.php' );
